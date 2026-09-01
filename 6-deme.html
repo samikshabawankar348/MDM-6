@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <div class="name-box">
+    <input type="text" placeholder="Enter your name" id="name">
+    <button onclick="showName()">Submit</button>
+</div>
+
+<p id="result"></p>
+
+<script>
+function showName() {
+    let name = document.getElementById("name").value;
+    document.getElementById("result").innerText = "Hello, " + name + "!";
+}
+</script>
+</head>
+<body>
+    
+</body>
+</html>

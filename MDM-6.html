@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Student Grade Calculator</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 flex items-center justify-center p-5">
+
+    <div class="w-full max-w-lg bg-white rounded-3xl shadow-2xl p-8">
+
+        <!-- Header -->
+        <div class="text-center mb-7">
+
+            <div class="text-5xl mb-3">🎓</div>
+
+            <h1 class="text-3xl font-bold text-blue-700">
+                Smart Grade Calculator
+            </h1>
+
+            <p class="text-gray-500 mt-2">
+                Calculate your academic performance instantly
+            </p>
+
+        </div>
+
+
+        <!-- Student Name -->
+        <label class="block text-gray-700 font-semibold mb-2">
+            Student Name
+        </label>
+
+        <input
+            type="text"
+            id="name"
+            placeholder="Enter student name"
+            class="w-full px-4 py-3 mb-5 border border-gray-300 rounded-xl
+            focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+
+        <!-- Mathematics -->
+        <label class="block text-gray-700 font-semibold mb-2">
+            Mathematics
+        </label>
+
+        <input
+            type="number"
+            id="sub1"
+            min="0"
+            max="100"
+            placeholder="Marks out of 100"
+            class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-xl
+            focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+
+        <!-- OOPs -->
+        <label class="block text-gray-700 font-semibold mb-2">
+            OOPs
+        </label>
+
+        <input
+            type="number"
+            id="sub2"
+            min="0"
+            max="100"
+            placeholder="Marks out of 100"
+            class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-xl
+            focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+
+        <!-- English -->
+        <label class="block text-gray-700 font-semibold mb-2">
+            English
+        </label>
+
+        <input
+            type="number"
+            id="sub3"
+            min="0"
+            max="100"
+            placeholder="Marks out of 100"
+            class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-xl
+            focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+
+        <!-- DSA -->
+        <label class="block text-gray-700 font-semibold mb-2">
+            DSA
+        </label>
+
+        <input
+            type="number"
+            id="sub4"
+            min="0"
+            max="100"
+            placeholder="Marks out of 100"
+            class="w-full px-4 py-3 mb-4 border border-gray-300 rounded-xl
+            focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+
+        <!-- Web Development -->
+        <label class="block text-gray-700 font-semibold mb-2">
+            Web Development
+        </label>
+
+        <input
+            type="number"
+            id="sub5"
+            min="0"
+            max="100"
+            placeholder="Marks out of 100"
+            class="w-full px-4 py-3 mb-6 border border-gray-300 rounded-xl
+            focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+
+
+        <!-- Buttons -->
+        <div class="flex gap-3">
+
+            <button
+                onclick="calculateResult()"
+                class="flex-1 bg-blue-600 hover:bg-blue-700
+                text-white font-bold py-3 rounded-xl
+                transition duration-300 shadow-lg"
+            >
+                Calculate Result
+            </button>
+
+            <button
+                onclick="resetCalculator()"
+                class="px-5 bg-gray-200 hover:bg-gray-300
+                text-gray-700 font-bold rounded-xl
+                transition duration-300"
+            >
+                Reset
+            </button>
+
+        </div>
+
+
+        <!-- Result -->
+        <div
+            id="result"
+            class="hidden mt-7 p-6 bg-gradient-to-br from-blue-50 to-purple-50
+            border border-blue-200 rounded-2xl"
+        >
+
+            <h2 class="text-2xl font-bold text-blue-700 text-center mb-4">
+                🎉 Your Result
+            </h2>
+
+
+            <!-- Student Name -->
+            <p class="text-lg mb-2">
+                <b>Student:</b>
+                <span id="studentName"></span>
+            </p>
+
+
+            <!-- Total -->
+            <p class="text-lg mb-2">
+                <b>Total Marks:</b>
+                <span id="total"></span> / 500
+            </p>
+
+
+            <!-- Percentage -->
+            <p class="text-lg mb-2">
+                <b>Percentage:</b>
+                <span id="percentage"></span>%
+            </p>
+
+
+            <!-- Grade -->
+            <p class="text-lg mb-2">
+                <b>Grade:</b>
+                <span id="grade" class="font-bold text-blue-600"></span>
+            </p>
+
+
+            <!-- Status -->
+            <p class="text-lg mb-4">
+                <b>Status:</b>
+                <span id="status" class="font-bold"></span>
+            </p>
+
+
+            <!-- Progress Bar -->
+            <p class="font-semibold mb-2">
+                Performance
+            </p>
+
+            <div class="w-full bg-gray-200 rounded-full h-4">
+
+                <div
+                    id="progress"
+                    class="bg-blue-600 h-4 rounded-full transition-all duration-1000"
+                    style="width: 0%"
+                ></div>
+
+            </div>
+
+
+            <!-- Performance Message -->
+            <div
+                id="message"
+                class="mt-5 p-4 bg-white rounded-xl text-center font-semibold"
+            ></div>
+
+
+            <!-- Subject Performance -->
+            <div class="mt-5">
+
+                <h3 class="font-bold text-lg mb-3">
+                    📚 Subject Performance
+                </h3>
+
+                <p>Mathematics: <span id="m1"></span></p>
+                <p>OOPs: <span id="m2"></span></p>
+                <p>English: <span id="m3"></span></p>
+                <p>DSA: <span id="m4"></span></p>
+                <p>Web Development: <span id="m5"></span></p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        function calculateResult() {
+
+            // Get name
+            let name = document.getElementById("name").value.trim();
+
+            // Get marks
+            let sub1 = Number(document.getElementById("sub1").value);
+            let sub2 = Number(document.getElementById("sub2").value);
+            let sub3 = Number(document.getElementById("sub3").value);
+            let sub4 = Number(document.getElementById("sub4").value);
+            let sub5 = Number(document.getElementById("sub5").value);
+
+
+            // Validation
+            if (
+                name === "" ||
+                sub1 < 0 || sub1 > 100 ||
+                sub2 < 0 || sub2 > 100 ||
+                sub3 < 0 || sub3 > 100 ||
+                sub4 < 0 || sub4 > 100 ||
+                sub5 < 0 || sub5 > 100
+            ) {
+
+                alert("Please enter valid marks between 0 and 100.");
+                return;
+
+            }
+
+
+            // Total
+            let total = sub1 + sub2 + sub3 + sub4 + sub5;
+
+
+            // Percentage
+            let percentage = (total / 500) * 100;
+
+
+            // Grade
+            let grade;
+
+            if (percentage >= 90) {
+                grade = "A+";
+            }
+            else if (percentage >= 80) {
+                grade = "A";
+            }
+            else if (percentage >= 70) {
+                grade = "B";
+            }
+            else if (percentage >= 60) {
+                grade = "C";
+            }
+            else if (percentage >= 50) {
+                grade = "D";
+            }
+            else {
+                grade = "F";
+            }
+
+
+            // Pass / Fail
+            let status;
+
+            if (percentage >= 50) {
+                status = "PASS ✅";
+            }
+            else {
+                status = "FAIL ❌";
+            }
+
+
+            // Performance message
+            let message;
+
+            if (percentage >= 90) {
+                message = "🏆 Outstanding Performance!";
+            }
+            else if (percentage >= 80) {
+                message = "🌟 Excellent Work!";
+            }
+            else if (percentage >= 70) {
+                message = "👏 Very Good Performance!";
+            }
+            else if (percentage >= 60) {
+                message = "👍 Good Performance!";
+            }
+            else if (percentage >= 50) {
+                message = "🙂 Keep Improving!";
+            }
+            else {
+                message = "📖 Don't Give Up. Keep Studying!";
+            }
+
+
+            // Display basic result
+            document.getElementById("studentName").innerText = name;
+
+            document.getElementById("total").innerText = total;
+
+            document.getElementById("percentage").innerText =
+                percentage.toFixed(2);
+
+            document.getElementById("grade").innerText = grade;
+
+            document.getElementById("status").innerText = status;
+
+            document.getElementById("message").innerText = message;
+
+
+            // Subject marks
+            document.getElementById("m1").innerText = sub1 + "/100";
+            document.getElementById("m2").innerText = sub2 + "/100";
+            document.getElementById("m3").innerText = sub3 + "/100";
+            document.getElementById("m4").innerText = sub4 + "/100";
+            document.getElementById("m5").innerText = sub5 + "/100";
+
+
+            // Progress bar
+            document.getElementById("progress").style.width =
+                percentage + "%";
+
+
+            // Show result
+            document.getElementById("result").classList.remove("hidden");
+
+        }
+
+
+        // Reset function
+        function resetCalculator() {
+
+            document.getElementById("name").value = "";
+
+            document.getElementById("sub1").value = "";
+            document.getElementById("sub2").value = "";
+            document.getElementById("sub3").value = "";
+            document.getElementById("sub4").value = "";
+            document.getElementById("sub5").value = "";
+
+            document.getElementById("result").classList.add("hidden");
+
+        }
+
+    </script>
+
+</body>
+
+</html>

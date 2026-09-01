@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>StudySphere AI</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body{
+font-family: Arial;
+margin:0;
+background: linear-gradient(135deg,#667eea,#764ba2);
+color:white;
+transition:0.3s;
+}
+.dark{
+background:#111;
+color:white;
+}
+.container{
+padding:20px;
+}
+.card{
+background:rgba(255,255,255,0.15);
+padding:20px;
+border-radius:15px;
+margin-bottom:20px;
+backdrop-filter:blur(10px);
+}
+input,button{
+padding:8px;
+margin:5px;
+border:none;
+border-radius:8px;
+}
+button{
+background:#ffcc00;
+cursor:pointer;
+}
+.hidden{display:none;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>📚 StudySphere AI Dashboard</h1>
+<button onclick="toggleTheme()">Toggle Dark/Light</button>
+
+<div id="loginCard" class="card">
+<h3>Login</h3>
+<input id="email" placeholder="Email">
+<input id="password" type="password" placeholder="Password">
+<button onclick="login()">Login</button>
+<button onclick="signup()">Signup</button>
+<button onclick="resetPassword()">Reset Password</button>
+</div>
+
+<div id="dashboard" class="hidden">
+
+<div class="card">
+<h3>Add Study Log</h3>
+<input id="subject" placeholder="Subject">
+<input id="topic" placeholder="Topic">
+<input id="hours" type="number" placeholder="Hours">
+<button onclick="addStudy()">Add</button>
+</div>
+
+<div class="card">
+<h3>Daily Target (1 hr)</h3>
+<p id="targetStatus"></p>
+</div>
+
+<div class="card">
+<h3>AI Score Prediction</h3>
+<p id="prediction"></p>
+</div>
+
+<div class="card">
+<h3>Weak Area Detection</h3>
+<p id="weakArea"></p>
+</div>
+
+<div class="card">
+<h3>Motivation</h3>
+<p id="quote"></p>
+<button onclick="generateQuote()">New Quote</button>
+</div>
+
+<div class="card">
+<h3>Streak & Points</h3>
+<p id="streak"></p>
+</div>
+
+<div class="card">
+<h3>To Do List</h3>
+<input id="todoInput" placeholder="Add task">
+<button onclick="addTodo()">Add</button>
+<ul id="todoList"></ul>
+</div>
+
+<div class="card">
+<h3>Study Chart</h3>
+<canvas id="chart"></canvas>
+</div>
+
+<div class="card">
+<h3>Mock Test</h3>
+<button onclick="generateMock()">Generate Test</button>
+<p id="mock"></p>
+</div>
+
+<div class="card">
+<h3>Flashcards</h3>
+<button onclick="flashcard()">Generate Flashcard</button>
+<p id="flash"></p>
+</div>
+
+<div class="card">
+<button onclick="exportCSV()">Export CSV</button>
+</div>
+
+</div>
+
+</div>
+
+<script>
+let studyData = JSON.parse(localStorage.getItem("study")) || [];
+let streakCount = localStorage.getItem("streak") || 0;
+let points = localStorage.getItem("points") || 0;
+
+function toggleTheme(){
+document.body.classList.toggle("dark");
+}
+
+function login(){
+document.getElementById("loginCard").classList.add("hidden");
+document.getElementById("dashboard").classList.remove("hidden");
+loadDashboard();
+}
+
+function signup(){
+alert("Signup successful (Demo Mode)");
+}
+
+function resetPassword(){
+alert("Password reset link sent (Demo)");
+}
+
+function addStudy(){
+let subject = document.getElementById("subject").value;
+let topic = document.getElementById("topic").value;
+let hours = parseInt(document.getElementById("hours").value);
+
+studyData.push({subject,topic,hours,date:new Date().toLocaleDateString()});
+localStorage.setItem("study",JSON.stringify(studyData));
+
+if(hours>=1){
+streakCount++;
+if(streakCount%10==0){points++;}
+}
+localStorage.setItem("streak",streakCount);
+localStorage.setItem("points",points);
+
+loadDashboard();
+}
+
+function loadDashboard(){
+let total = studyData.reduce((sum,x)=>sum+x.hours,0);
+document.getElementById("prediction").innerText =
+"Predicted Score: "+(total*5 + streakCount*2);
+
+document.getElementById("targetStatus").innerText =
+total>=1 ? "Target Achieved ✅" : "Target Missed ❌";
+
+document.getElementById("weakArea").innerText =
+total<3 ? "You need more consistency!" : "Good Progress!";
+
+document.getElementById("streak").innerText =
+"Streak: "+streakCount+" | Points: "+points;
+
+renderChart();
+generateQuote();
+}
+
+function generateQuote(){
+let quotes=[
+"Success is built daily.",
+"Consistency beats motivation.",
+"Small progress is still progress."
+];
+document.getElementById("quote").innerText =
+quotes[Math.floor(Math.random()*quotes.length)];
+}
+
+function addTodo(){
+let task=document.getElementById("todoInput").value;
+let li=document.createElement("li");
+li.innerText=task;
+document.getElementById("todoList").appendChild(li);
+}
+
+function renderChart(){
+let ctx=document.getElementById("chart");
+new Chart(ctx,{
+type:'bar',
+data:{
+labels:studyData.map(x=>x.subject),
+datasets:[{label:'Hours',data:studyData.map(x=>x.hours)}]
+}
+});
+}
+
+function generateMock(){
+document.getElementById("mock").innerText =
+"What is 2+2? Answer: 4 (Demo Question)";
+}
+
+function flashcard(){
+document.getElementById("flash").innerText =
+"Flashcard: Revise key formulas of today's topic.";
+}
+
+function exportCSV(){
+let csv="Subject,Topic,Hours\n";
+studyData.forEach(x=>{
+csv+=${x.subject},${x.topic},${x.hours}\n;
+});
+let blob=new Blob([csv],{type:"text/csv"});
+let link=document.createElement("a");
+link.href=URL.createObjectURL(blob);
+link.download="studydata.csv";
+link.click();
+}
+</script>
+
+</body>
+</html>

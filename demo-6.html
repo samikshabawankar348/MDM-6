@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text Box to Label Demo</title>
+</head>
+<body>
+    <h2>Display Input Text</h2>
+    <input type="text" id="userInput" placeholder="Type something here...">
+    <button onclick="showText()">Submit</button>
+    <br><br>
+    <label id="displayLabel">Your text will appear here</label>
+
+    <script>
+        function showText() {
+            var inputText = document.getElementById("userInput").value;
+            console.log(inputText);
+            document.getElementById("displayLabel").innerText = inputText;
+        }
+    </script>
+
+</body>
+</html>
